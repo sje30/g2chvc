@@ -3,7 +3,7 @@
 #Creates list containing spike times for all the hdf5 files
 create.spikes<-function(mea.data.dir)  { 
   mea.data.files <- make.meafile.cache(mea.data.dir)
-  file.list<-mclapply(mea.data.files[,"files"], sort.data, mc.cores = num.cores)
+  file.list<-mclapply(mea.data.files[,"files"], sort.data)
   file.df<-do.call("rbind", file.list)
   s.list.all<-NULL
   s.list.all$ctx<-mclapply(ages, function(x) spikes(x, "ctx", file.df))
