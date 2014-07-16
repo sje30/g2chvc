@@ -15,6 +15,22 @@
 
 \section*{Setup}
 
+<<setup-timeit, include=FALSE>>=
+knitr::knit_hooks$set(timeit = local({
+  now = NULL
+  function(before, options) {
+    if (before) {
+      now <<- Sys.time()
+    } else {
+      res = difftime(Sys.time(), now)
+      now <<- NULL
+      # use options$label if you want the chunk label as well
+      sprintf('Time for this code chunk %.3f s', as.numeric(as.character(res)))
+    }
+  }})
+)
+@
+
 <<setup-knitr,eval=TRUE,include=TRUE>>=
 require(knitr)
 require(xtable)
@@ -37,7 +53,7 @@ require(g2chvc)
 mea.data.dir <- g2chvcdatadir()
 
 #Set global variables
-options(mc.cores = 4)
+options(mc.cores = 8)
 types<-c("burst", "network.spike", "fir.rate", "corr", "theta.burst")
 ages<-c(7, 10, 11, 14, 17, 18, 21, 24, 25, 28)
 regions<-c("ctx", "hpc")
@@ -45,15 +61,52 @@ mi.par <- list(beg.isi=0.100, end.isi=0.250, min.ibi=0.800, min.durn=0.05, min.s
 @
 
 
-<<read-data>>=
-system.time(s.list.all<-create.spikes(mea.data.dir))
+Read in all of the HDF5 files (which can take  a few minutes).
+
+<<read-data,timeit=TRUE>>=
+s.list.all<-create.spikes(mea.data.dir)
+@ 
+
+\clearpage
+\subsection*{Create feature matrix}
+
+For each MEA recording, we calculate all the features.  Perform
+analysis for all 5 types of analysis. Data.all stores data returned
+from all 5 types of analysis.  Creating the feature matrix can take
+about 10 minutes on a modern laptop.
+
+<<compute-features>>=
+data.all<-NULL
+for (i in 1:length(types)) {
+  data.all[[i]]<-spike.analyse(types[i], s.list.all)
+  plot.fn(data.all[[i]], types[i], stats=TRUE)
+}
+names(data.all)<-types
+@
+
+Finally, we create the data frame.  Let's save it somewhere obvious...
+
+<<class-create-df>>=
+#Create data frame of 11 features from data.all (obtained from analysis_main)
+data.df<-cbind(data.all[[1]][,6], data.all[[1]][,5],  data.all[[1]][,1:4], data.all[[2]][,1:3], 
+               data.all[[3]][, 1:2], data.all[[4]][,2], data.all[[5]][,1])
+names(data.df)<-c("region", "age", "burst.rate", "burst.dur","spikes.in.bursts","CV.IBI", "num.n.s",
+                  "n.s.peak", "n.s.dur","fir.rate","burst.fir.rate", "corr","theta.burst")
+#Replace any NULL values with 0
+data.df[is.na(data.df)]<-0
+@ 
+
+TODO: this is missing the filename.  Can we add this without
+breaking the rest of the scripts?  Can we use rownames()?
+
+<<save-data-frame>>=
+write.csv(data.df, file="/tmp/hvcfeatures.csv", row.names=FALSE)
 @ 
 
 \section*{About this document}
 
 <<eval=FALSE>>=
-require(knitr)
-knit2pdf("hvc_makefeatures.Rnw")
+knitr::knit2pdf("hvc_makefeatures.Rnw")
 @ 
 
 \end{document}
