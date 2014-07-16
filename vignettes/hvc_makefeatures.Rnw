@@ -1,0 +1,58 @@
+\documentclass{article}
+\usepackage{mathpazo}
+\usepackage[a4paper,margin=2cm]{geometry}
+\usepackage{url}
+\begin{document}
+
+\title{Hippocampus vs Cortex Project: make feature matrix}
+
+
+\author{EC, SJE}
+
+\date{\today}
+\maketitle
+
+
+\section*{Setup}
+
+<<setup-knitr,eval=TRUE,include=TRUE>>=
+require(knitr)
+require(xtable)
+options(width=60)
+opts_chunk$set(cache=TRUE)
+opts_chunk$set(echo=TRUE)
+opts_chunk$set(dev='pdf')
+@
+
+<<external-packages>>=
+library(sjemea)                         #my package
+library(rhdf5)
+library(parallel)
+require(g2chvcdata)
+@
+
+<<load-packages>>=
+require(g2chvc)
+@ 
+
+<<parameters>>=
+#Set data directory for .h5 files
+mea.data.dir <- g2chvcdatadir()
+
+#Set global variables
+options(mc.cores = 4)
+num.cores <- getOption("mc.cores")
+types<-c("burst", "network.spike", "fir.rate", "corr", "theta.burst")
+ages<-c(7, 10, 11, 14, 17, 18, 21, 24, 25, 28)
+regions<-c("ctx", "hpc")
+mi.par <- list(beg.isi=0.100, end.isi=0.250, min.ibi=0.800, min.durn=0.05, min.spikes=6)
+@
+
+\section*{About this document}
+
+<<eval=FALSE>>=
+require(knitr)
+knit2pdf("hvc_makefeatures.Rnw")
+@ 
+
+\end{document}
