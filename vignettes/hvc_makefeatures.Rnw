@@ -29,9 +29,6 @@ library(sjemea)                         #my package
 library(rhdf5)
 library(parallel)
 require(g2chvcdata)
-@
-
-<<load-packages>>=
 require(g2chvc)
 @ 
 
@@ -41,12 +38,16 @@ mea.data.dir <- g2chvcdatadir()
 
 #Set global variables
 options(mc.cores = 4)
-num.cores <- getOption("mc.cores")
 types<-c("burst", "network.spike", "fir.rate", "corr", "theta.burst")
 ages<-c(7, 10, 11, 14, 17, 18, 21, 24, 25, 28)
 regions<-c("ctx", "hpc")
 mi.par <- list(beg.isi=0.100, end.isi=0.250, min.ibi=0.800, min.durn=0.05, min.spikes=6)
 @
+
+
+<<read-data>>=
+system.time(s.list.all<-create.spikes(mea.data.dir))
+@ 
 
 \section*{About this document}
 
