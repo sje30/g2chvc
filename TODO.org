@@ -1,0 +1,5 @@
+* Put raw data on zenodo?
+  Currently in ~/Dropbox/hvc/raw/raw.tgz
+
+* Figures to draft
+
