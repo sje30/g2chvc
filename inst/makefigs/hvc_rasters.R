@@ -1,5 +1,5 @@
 ## Create rasters across development.
-
+## R CMD BATCH hvc_rasters.R
 require(g2chvcdata)
 require(sjemea)
 require(rhdf5)
@@ -8,9 +8,9 @@ require(rhdf5)
 t.beg <- 300
 t.end <- t.beg + 60
 
-h5.dir <- g2chvcdatadir()
 
 read.h5 <- function(file) {
+  h5.dir <- g2chvcdatadir()
   s <- h5.read.spikes( paste0(h5.dir, file), beg=t.beg, end=t.end)
   s
 }
