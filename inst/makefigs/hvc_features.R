@@ -48,9 +48,13 @@ qplot.sje <- function(x, upper=0) {
   p <- ggplot(df1) +
     geom_boxplot(aes(x=factor(age), y=values, fill=region),
                  lwd=.1, position="dodge", outlier.size=0.5) +
-                   theme_bw(base_size=8) + theme(legend.position='none') + 
-                   xlab("DIV") + ylab(ynames[x]) +
-                     theme(axis.ticks = element_line(size=0.2))
+                   theme_bw(base_size=8) + theme(legend.position='none') +
+                     theme(panel.border = element_blank(),
+                           panel.grid.major=element_blank(), #no grid
+                           panel.background=element_blank(), #no grid
+                           axis.line=element_line(size=.2)) +
+                       xlab("DIV") + ylab(ynames[x]) +
+                         theme(axis.ticks = element_line(size=0.2))
   
   
   ## pold <- qplot(factor(age), values, fill=region, data=data.df, 
@@ -151,12 +155,17 @@ mytable <- tableGrob(table, name="name",
                      gpar.coltext=gpar(fontsize=6, fontface="bold"),
                      gpar.rowtext=gpar(fontsize=6, fontface="bold"))
 
-pdf(file= 'features_box2a.pdf', pointsize=10,
+pdf(file= 'hvc_features1.pdf', pointsize=10,
     paper = 'a4',
     width=inch(18), height=inch(16))
 do.call(grid.arrange, g2)
 pushViewport(viewport(0.80, 0.4, 0.2, 0.5))
 grid.draw(dummy.legend); popViewport()
+pushViewport(viewport())
+grid.text(LETTERS[1:12], gp=gpar(fontsize=12),
+          x=unit(rep(c(.08, 0.41, 0.75), times=4), "npc"),
+          y=unit(rep(c(0.99, 0.75, 0.5, 0.25), each=3) , "npc"))
+popViewport()
 pushViewport(viewport(0.83, 0.1, 0.28, 0.08))
 grid.draw(mytable);
 ##grid.rect();
