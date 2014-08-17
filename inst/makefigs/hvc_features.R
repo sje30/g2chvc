@@ -114,7 +114,9 @@ upper.bounds[4] = 1.6
 upper.bounds[5] = 150
 upper.bounds[8] = 10
 upper.bounds[9] = 125
-l <- mapply(qplot.sje, 1:11, upper.bounds, SIMPLIFY=FALSE)
+
+plot.order <- c(8:9, 1:7, 10:11)        #rearrange to follow description in paper.
+l <- mapply(qplot.sje, plot.order, upper.bounds[plot.order], SIMPLIFY=FALSE)
 ##plot(l[[4]])
 
 ##l <- list(qplot.sje(1), qplot.sje(2))
