@@ -3,7 +3,6 @@
 ## 2014-08-09
 
 ## First need the data.df function.
-## 10 should be length(ages) in most cases...
 
 require(ggplot2)
 require(grid)
@@ -13,13 +12,15 @@ require(g2chvc)                         #source('analysis_functions.R')
 stats.stars <- function(plot.df) {
   ## Adapted from analysis_functions.R
   q.val<-stat.test(plot.df)
-  star<-rep("",10)
+  stopifnot(length(q.val)==10)
+  star<-rep("", length(q.val))
   star[which(q.val<=0.05)]<-" *"
   star[which(q.val<=0.01)]<-"**"
   star
 }
 
 qplot.sje <- function(x, upper=0) {
+  ## Draw one of the boxplots for a given feature number X.
   ## X is the row number to process.
   values <- data.df[,x+2]
   if (x==11) {
@@ -34,38 +35,17 @@ qplot.sje <- function(x, upper=0) {
     lab <- sprintf('%s\n%s', x.lab, star[age.id])
     lab
   }
-  ## to move the legend position.
-  ##theme(legend.position=c(0.1,0.9), legend.direction="horizontal") +
-
   
-  ## p <- qplot(factor(age), values, fill=region, data=data.df, 
-  ##            geom="boxplot", position="dodge", outlier.size=1.0, fatten=1) +
-  ##              theme_bw(base_size=8) + 
-  ##                theme(legend.position='none') +
-  ##                  xlab("DIV") + ylab(names(data.df)[x+2])
-
   df1 <- data.frame(age=data.df$age, region=data.df$region, values=values)
   p <- ggplot(df1) +
     geom_boxplot(aes(x=factor(age), y=values, fill=region),
                  lwd=.1, position="dodge", outlier.size=0.5) +
-                   theme_bw(base_size=8) + theme(legend.position='none') +
-                     theme(panel.border = element_blank(),
-                           panel.grid.major=element_blank(), #no grid
-                           panel.background=element_blank(), #no grid
-                           axis.line=element_line(size=.2)) +
-                       xlab("DIV") + ylab(ynames[x]) +
-                         theme(axis.ticks = element_line(size=0.2))
+                   theme_classic(base_size=8) + theme(legend.position='none') +
+                     theme(axis.line=element_blank()) +
+                             xlab("DIV") + ylab(ynames[x]) +
+                               theme(axis.line=element_blank(),
+                                     axis.ticks = element_line(size=0.2))
   
-  
-  ## pold <- qplot(factor(age), values, fill=region, data=data.df, 
-  ##            geom="boxplot", position="dodge", outlier.size=1.0, fatten=1) +
-  ##              theme_bw(base_size=8) + 
-  ##                theme(legend.position='none') +
-  ##                  xlab("DIV") + ylab(names(data.df)[x+2])
-
-    
-  ## or lets remove the outliers.
-
   if (upper>0) {
     ## let's omit some outliers.
     outliers = sum(values > upper)
@@ -78,10 +58,20 @@ qplot.sje <- function(x, upper=0) {
   }
   p = p + scale_x_discrete(label=star.formatter)
 
+  ## Restrict the range of the axes;  don't use aes() call here.
+  ## See http://stackoverflow.com/questions/25327694/how-to-tweak-the-extent-to-which-an-axis-is-drawn-in-ggplot2  
+  gpb = ggplot_build(p)
+  xrange = range(gpb$panel$ranges[[1]]$x.major_source)
+  yrange = range(gpb$panel$ranges[[1]]$y.major_source)
+  p = p +
+    geom_segment(x=xrange[1], xend=xrange[2], y=-Inf, yend=-Inf, size=0.03) +
+    geom_segment(y=yrange[1], yend=yrange[2], x=-Inf, xend=-Inf, size=0.03)
+    
   p
   
 }
 
+  
 g_legend <- function(a.gplot){
   ## http://stackoverflow.com/questions/11883844/inserting-a-table-under-the-legend-in-a-ggplot2-histogram
   tmp <- ggplot_gtable(ggplot_build(a.gplot))
@@ -93,6 +83,7 @@ g_legend <- function(a.gplot){
 ######################################################################
 ## end of functions.
 
+## Todo: this should come from the package.
 load("~/proj/sangermea/hvc/ellese/2014-06-08/features.Rda")  ## we need data.df
 
 
@@ -109,6 +100,10 @@ ages <- unique(data.df$age)             #is this created elsewhere?
 
 temp = qplot.sje(1)
 ##l <- lapply(1:11, function(x) { qplot.sje(x)})
+
+## upper.bounds stores the maximal value to show on the graph; if zero, there is no limit.
+## These values were chosen to minimise the y range whilst mininising the number of outliers
+## omitted from the graph.
 upper.bounds <- rep(0,11)
 upper.bounds[4] = 1.6
 upper.bounds[5] = 150
@@ -145,7 +140,8 @@ dummy <- l[[1]] + theme(legend.position=c(0.9,0.1), legend.direction="horizontal
 dummy.legend <- g_legend(dummy)
 
 
-## Compute a table.
+## Compute a table that will show the number of
+## arrays per age for each region.
 table <- t(table(data.df$age, data.df$region))
 mytable <- tableGrob(table, name="name",
                      padding.h = unit(2, "mm"),
@@ -181,5 +177,5 @@ dev.off()
 ## End of code...
 
 ## pdfcrop hvc_features1.pdf
-q()
+
 
