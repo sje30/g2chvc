@@ -1,0 +1,8 @@
+Package: g2chvc
+Title: Analysis files Genes to Cognition Hippocampus vs Cortex project
+Description: 
+Version: 0.1
+Author: Stephen J Eglen
+Depends: R (>= 3.1.0)
+License: GPL (>= 2)
+LazyData: true
