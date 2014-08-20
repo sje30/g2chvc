@@ -12,3 +12,8 @@ You will first need to install the data package `g2chvcdata` and the
 	R CMD INSTALL sjemea_0.42.tar.gz
 
 
+## Generating the figures
+
+Go into `inst/makefigs` and you can make the figurese using the R
+scripts in that folder.
+
