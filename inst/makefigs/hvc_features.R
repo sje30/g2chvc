@@ -49,7 +49,8 @@ qplot.sje <- function(x, upper=0) {
   if (upper>0) {
     ## let's omit some outliers.
     outliers = sum(values > upper)
-    p = p + coord_cartesian(ylim=c(0, upper)) +
+    lower = 0 - (upper * 0.04)
+    p = p + coord_cartesian(ylim=c(lower, upper)) +
       annotate("text", x=1.2, y=(upper*0.95), size=2,
                hjust=0, ##colour="red",
                label=sprintf("(%d outliers)", outliers))
@@ -64,8 +65,8 @@ qplot.sje <- function(x, upper=0) {
   xrange = range(gpb$panel$ranges[[1]]$x.major_source)
   yrange = range(gpb$panel$ranges[[1]]$y.major_source)
   p = p +
-    geom_segment(x=xrange[1], xend=xrange[2], y=-Inf, yend=-Inf, size=0.03) +
-    geom_segment(y=yrange[1], yend=yrange[2], x=-Inf, xend=-Inf, size=0.03)
+    geom_segment(x=xrange[1], xend=xrange[2], y=-Inf, yend=-Inf, size=0.1) +
+    geom_segment(y=yrange[1], yend=yrange[2], x=-Inf, xend=-Inf, size=0.1)
     
   p
   
@@ -90,7 +91,7 @@ load("~/proj/sangermea/hvc/ellese/2014-06-08/features.Rda")  ## we need data.df
 ynames1 <- names(data.df)[-(1:2)]
 ynames <- c("burst rate (/min)", "burst duration (s)", "% spikes in burst",
             "CV of IBI", "network spike rate (/min)", "network spike peak", "network spike duration (s)",
-            "firing rate (Hz)", "within burst firing rate (Hz)", "mean correlation",
+            "firing rate (Hz)", "w/in burst firing rate (Hz)", "mean correlation",
             "% theta bursting")
 
 ## http://www.cookbook-r.com/Graphs/Axes_(ggplot2)/
