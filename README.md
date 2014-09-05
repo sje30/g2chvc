@@ -15,7 +15,10 @@ To install this package in R you need the devtools package; skip the
 first line if you already have it installed:
 
 	install.packages("devtools")
-	devtools::install_github("sje30/g2chvc")
+	devtools::install_github("sje30/g2chvc", quick=TRUE)
+
+Setting `quick=TRUE` prevents the vignettes from being rebuilt (which
+can take a long time right now.)
 
 ## Generating the figures
 
