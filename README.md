@@ -3,17 +3,22 @@
 
 Genes to Cognition: Hippocampus vs Cortex project
 
-## Installation instructions
+## Prerequistes
 
-You will first need to install the data package `g2chvcdata` and the
-`sjemea` package.  (Instructions here for tar balls from zenodo?)
+You will first need to install the data package
+[g2chvcdata](http://github.com/sje30/g2chvcdata) and the
+[sjemea](http://github.com/sje30/sjemea) packages.
 
-	R CMD INSTALL g2chvcdata_0.1.tar.gz
-	R CMD INSTALL sjemea_0.42.tar.gz
+# Installing this package
 
+To install this package in R you need the devtools package; skip the
+first line if you already have it installed:
+
+	install.packages("devtools")
+	devtools::install_github("sje30/g2chvc")
 
 ## Generating the figures
 
-Go into `inst/makefigs` and you can make the figurese using the R
+Go into `inst/makefigs` and you can make the figures using the R
 scripts in that folder.
 
