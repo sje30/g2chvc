@@ -19,6 +19,10 @@ first line if you already have it installed:
 
 ## Generating the figures
 
-Go into `inst/makefigs` and you can make the figures using the R
-scripts in that folder.
+The scripts for generating figures are stored in `inst/makefigs/`
+which you can directly run, e.g.:
 
+	require(g2chvc)
+	source(system.file("makefigs/hvc_rasters.R", package="g2chvc"))
+
+In this case you will see PDFs made in your current working directory.
