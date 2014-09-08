@@ -85,7 +85,8 @@ g_legend <- function(a.gplot){
 ## end of functions.
 
 ## Todo: this should come from the package.
-load("~/proj/sangermea/hvc/ellese/2014-06-08/features.Rda")  ## we need data.df
+##load("~/proj/sangermea/hvc/ellese/2014-06-08/features.Rda")  ## we need data.df
+load(system.file("stored/features.Rda", package="g2chvc"))
 
 
 ynames1 <- names(data.df)[-(1:2)]
