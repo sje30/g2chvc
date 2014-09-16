@@ -33,9 +33,9 @@ spike.analyse<-function(type, s.list.all) {
 #Function to sort hdf5 data. Input is file name, output is data frame containing the 
 # file name, age and region of that data file
 sort.data<-function(file.name) {
-file.age<- h5read(file.name,"meta/age")
-file.region<- h5read(file.name,"meta/region")
-file.df<-data.frame(file=toString(file.name), age=file.age, region = file.region)
+  file.age<- h5read(file.name,"meta/age")
+  file.region<- h5read(file.name,"meta/region")
+  file.df<-data.frame(file=toString(file.name), age=file.age, region = file.region)
 }
 
 
