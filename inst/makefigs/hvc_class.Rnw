@@ -165,7 +165,7 @@ m.df <- data.frame(features.bestfirst.l, sorted.scores, m)
 names(m.df) <- c("Feature", "Gini", ages)
 digits <- c(0,0,2,rep(0,10))
 xtab <- xtable(m.df,caption="SVM performance",
-               label="lab:svm",
+               label="tab:svm",
                digits=digits)
 @ 
 
