@@ -3,3 +3,6 @@
 
 * Figures to draft
 
+Figure 1: rasters (OK)
+
+Figure 2: 
