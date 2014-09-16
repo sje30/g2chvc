@@ -170,7 +170,7 @@ xtab <- xtable(m.df,caption="SVM performance",
 <<reduced-features-table,results='asis',timeit=FALSE>>=
 print(xtab, booktabs=TRUE,include.rownames=FALSE)
 print(xtab, booktabs=TRUE,include.rownames=FALSE,
-      file="./svm-reduced-features.tex")
+      file="/tmp/svm-reduced-features.tex")
 @ 
 
 Finally, we can individually train the SVM and find best features.
