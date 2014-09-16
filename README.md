@@ -29,3 +29,13 @@ which you can directly run, e.g.:
 	source(system.file("makefigs/hvc_rasters.R", package="g2chvc"))
 
 In this case you will see PDFs made in your current working directory.
+
+## Generating the SVM table.
+
+	knitr::knit2pdf(system.file("makefigs", "hvc_class.Rnw", package="g2chvc"))
+
+This will generate a vignette and leave a copy of the .tex file
+and the generated vignette `hvc_class.pdf`.
+
+
+
