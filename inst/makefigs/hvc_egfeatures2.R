@@ -1,5 +1,5 @@
 ## Create rasters across development.
-## R CMD BATCH hvc_rasters.R
+## R CMD BATCH hvc_egfeatures2.R
 require(g2chvcdata)
 require(sjemea)
 require(rhdf5)
@@ -64,13 +64,10 @@ options(sjemea.corr.method = "Tiling")
 h14 <- h5.read.spikes( paste0(h5.dir, 'TC189-DIV14_A.h5'))
 median.train <- order(h14$nspikes)[30]
 plot.one.isihist(h14)
-plot.one.isihist(c14)
 
 ## Check a cortical recording.
-
-
 c14 <- h5.read.spikes( paste0(h5.dir, 'C57_CTX_G2CEPHYS1_TC11_DIV14_A.h5'))
-
+plot.one.isihist(c14)
 
 h14$ns <- compute.ns(h14, ns.T=0.003, ns.N=10,sur=100)
 ##plot(h14$ns, ylab='Count', xlab='Time (s)')
