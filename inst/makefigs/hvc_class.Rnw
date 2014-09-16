@@ -16,8 +16,8 @@
 \section*{Setup}
 
 <<setup-knitr,eval=TRUE,include=FALSE>>=
-require(knitr)
-require(xtable)
+library(knitr)
+library(xtable)
 options(width=60)
 opts_chunk$set(cache=TRUE)
 opts_chunk$set(echo=TRUE)
