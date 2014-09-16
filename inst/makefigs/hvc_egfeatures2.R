@@ -1,4 +1,5 @@
-## Create rasters across development.
+## Version 2 of showing the example features.
+##
 ## R CMD BATCH hvc_egfeatures2.R
 require(g2chvcdata)
 require(sjemea)
@@ -84,13 +85,18 @@ h14$ns <- compute.ns(h14, ns.T=0.003, ns.N=10,sur=100)
 plotegfeatures <- function() {
   pdf(file='hvc_egfeatures.pdf', width=inch(8.5), height=inch(13), pointsize=14)
   par(mfrow=c(3,1), las=1, bty='n', mar=c(3.5,3,0.5,0.5), mgp=c(1.8, 0.6, 0))
-  plot(h14$ns$mean, xlab='Time (s)', ylab='#active units',
-       main='') ##main='mean network spike' 
+  plot(h14$ns$mean, xlab='Time (s)', ylab='#active units', yaxt='n', ylim=c(0,20),
+       xaxt='n',
+       main='') ##main='mean network spike'
+  axis.ticks(1, -0.3, 0.3, 0.3, 2)
+  axis.ticks(2, 0, 20, 10, 1)
   plot.corr.index(h14, ,pch=20, cex=0.5, main='', # 'pairwise correlation'
                   dot.col='black',
+                  yaxt='n',
                   xaxt='n', xlim=c(0, 1600),
                   show.fit=FALSE, ylabel='correlation', show.method=FALSE)
-  axis(1, at=c(0, 400, 800, 1200, 1600))
+  axis.ticks(1, 0, 1600, 800, 3)
+  axis.ticks(2, 0, 1, 0.5, 1)
   abline(h=mean(h14$corr$corr.id[,"corr"]), col='grey')
   plot.one.isihist(h14, median.train, show.title=FALSE)
   text(grconvertX(rep(0.03, 3), from='ndc'),
