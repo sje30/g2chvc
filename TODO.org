@@ -6,3 +6,15 @@
 Figure 1: rasters (OK)
 
 Figure 2: 
+
+* coding things to fix in an ideal world:
+
+Avoid using subset() in programs.  It is causing check errors like:
+
+    boost.tree.age: no visible binding for global variable ‘age’
+
+Avoid global variables for "ages" and "regions"?
+
+
+
+
