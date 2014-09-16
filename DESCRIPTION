@@ -5,12 +5,9 @@ Version: 0.1
 Author: Stephen J Eglen <sje30@cam.ac.uk>
 Description: Code for g2chvc project
 Maintainer: Stephen J. Eglen <sje30@cam.ac.uk>
-Depends: R (>= 3.1.0)
+Depends: R (>= 3.1.0), randomForest, g2chvcdata, sjemea, rhdf5
 License: GPL (>= 2)
 LazyData: true
-Depends:
-	sjemea,
-	rhdf5,
-	g2chvcdata
+
 
 
