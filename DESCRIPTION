@@ -8,6 +8,3 @@ Maintainer: Stephen J. Eglen <sje30@cam.ac.uk>
 Depends: R (>= 3.1.0), randomForest, g2chvcdata, sjemea, rhdf5
 License: GPL (>= 2)
 LazyData: true
-
-
-
