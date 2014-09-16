@@ -17,7 +17,7 @@ axis.ticks <- function(which, lo, hi, step, n) {
 }
 
 
-plot.one.isihist <- function(s, n) {
+plot.one.isihist <- function(s, n, show.title=TRUE) {
   ## If n is missing take the median train.
   if (missing(n)) {
     n <- order(s$nspikes)[30]
@@ -26,7 +26,11 @@ plot.one.isihist <- function(s, n) {
   ##allisi <- unlist(sapply(h14$spikes, diff))
   ##allisi <- diff (h14$spikes$ch_17A_unit_0) #take just a median electrode.
   allisi <- diff (s$spikes[[n]])
-  subtitle <- sprintf("electrode %d nISI %d\n", n, length(allisi))
+  if (show.title) {
+    subtitle <- sprintf("electrode %d nISI %d\n", n, length(allisi))
+  } else {
+    subtitle = ""
+  }
   x <- allisi
   if (length(x)> 5) {
     den <- density(log(x))
@@ -88,7 +92,7 @@ plotegfeatures <- function() {
                   show.fit=FALSE, ylabel='correlation', show.method=FALSE)
   axis(1, at=c(0, 400, 800, 1200, 1600))
   abline(h=mean(h14$corr$corr.id[,"corr"]), col='grey')
-  plot.one.isihist(h14, median.train)
+  plot.one.isihist(h14, median.train, show.title=FALSE)
   text(grconvertX(rep(0.03, 3), from='ndc'),
        grconvertY(c(0.33, 0.67, 0.98), from='ndc'),
        c('C', 'B', 'A'), xpd=NA, cex=1.5)
