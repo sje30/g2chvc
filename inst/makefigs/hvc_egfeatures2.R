@@ -38,7 +38,8 @@ plot.one.isihist <- function(s, n, show.title=TRUE) {
     den$x <- exp(den$x)
     plot(den, log='x',
          ##xlab='Interspike interval (s)',
-         xlab='Frequency (Hz)', type='n',
+         ylab='density',
+         xlab='frequency (Hz)', type='n',
          main=subtitle,bty='n',xaxt='n', yaxt='n')
     ##theta.col <- "blue"
     ##theta.col <- rgb(0,0,0.7, alpha=0.2)
