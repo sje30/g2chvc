@@ -35,6 +35,7 @@ In this case you will see PDFs made in your current working directory.
 	knitr::knit2pdf(system.file("makefigs", "hvc_class.Rnw", package="g2chvc"))
 
 Or from the command line you can do something like:
+
 	MC_CORES=8 Rscript -e 'knitr::knit2pdf(system.file("makefigs", "hvc_class.Rnw", package="g2chvc"))'
 
 This will generate a vignette and leave a copy of the .tex file in the
