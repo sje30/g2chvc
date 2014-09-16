@@ -1,0 +1,173 @@
+\documentclass{article}
+\usepackage{mathpazo}
+\usepackage[a4paper,margin=2cm]{geometry}
+\usepackage{url,booktabs}
+\begin{document}
+
+\title{Hippocampus vs Cortex Project: classification}
+
+
+\author{EC, SJE}
+
+\date{\today}
+\maketitle
+
+
+\section*{Setup}
+
+<<setup-timeit, include=TRUE,timeit=FALSE>>=
+knitr::knit_hooks$set(timeit = local({
+  now = NULL
+  function(before, options, envir) {
+    if (before) {
+      now <<- Sys.time()
+    } else {
+      ##res = difftime(Sys.time(), now)
+      res = 1
+      now <<- NULL
+      # use options$label if you want the chunk label as well
+      sprintf('\nTime for this code chunk %.3f s', as.numeric(as.character(res)))
+    }
+  }})
+)
+@
+
+<<setup-knitr,eval=TRUE,include=FALSE>>=
+require(knitr)
+require(xtable)
+options(width=60)
+opts_chunk$set(cache=TRUE)
+opts_chunk$set(echo=TRUE)
+opts_chunk$set(timeit=FALSE)
+opts_chunk$set(dev='pdf')
+@
+
+<<external-packages,include=TRUE>>=
+library(sjemea)                         #my package
+library(rhdf5)
+library(parallel)
+require(g2chvcdata)
+require(g2chvc)
+## Following for classifiers
+library(tree)
+library(randomForest)
+library(gbm)
+library(e1071)
+library(modeest)
+@ 
+
+\section*{Classification}
+
+Run the tree and SVM classifiers.  Taken from classification.R
+
+<<classification-startup>>=
+load(system.file("stored", "features.Rda", package="g2chvc"))
+ages<-c(7, 10, 11, 14, 17, 18, 21, 24, 25, 28)
+regions<-c("ctx", "hpc")
+
+@ 
+
+
+
+<<class-decision,timeit=TRUE>>=
+##Decision trees classification results
+## SJE: temp vvv
+## tree.all<-boost.tree.all(data.df) #Results for classification into combined age and region
+##
+## SJE: temp vvv
+##Results for predicting age for ctx and hpc separately
+##tree.region<-mclapply(regions, function(x) {
+##  boost.tree.region(data.df, x, nreps=100)
+##})
+##names(tree.region)<-regions
+## Finally, tree.age stores results predicting region for each DIV separately
+tree.age<-mclapply(ages, function(x) {
+  boost.tree.age(data.df, x,nreps=250)
+})
+names(tree.age)<-ages
+@
+
+
+<<class-decision-feature-list>>=
+#Most important factors, by Mean Decrease in Gini.
+feature.mat<-sapply(tree.age, "[[", 2)
+order.mat<-apply(feature.mat,2, order) #Each column is DIV, each row is feature number in order of increasing importance
+avg.order<-order(apply(feature.mat, 1, mean))#Order of importance of factors, averaged over all ages
+@ 
+
+<<show-order-mat>>=
+print(order.mat)
+@ 
+
+<<class-sje-check-ranking>>=
+scores <- apply(feature.mat, 1, mean)
+print(sort(scores))
+@ 
+
+\section{SVM results}
+
+Uses training set of 2/3 of data and remaining as test set To use
+leave one out cross validation instead, change "test.set" to "LOOCV"
+
+
+<<class-svn,timeit=TRUE>>=
+test.method <- "LOOCV"                  # should be "LOOCV" or "test.set"
+#Accuracy of SVMs using linear and radial kernels and all 11 features
+#lin.MSE<-mclapply(ages, function(x) svm.calc(data.df, x, "linear", test.method))
+rad.MSE<-mclapply(ages, function(x) svm.calc(data.df, x, "radial", test.method))
+@ 
+
+
+\subsection*{Reducing the number of features to best N=3..10}
+
+Accuracy of models with  3--10 features using average important
+features and radial kernel.  
+
+
+<<class-svn-reduced,timeit=TRUE>>=
+feat.rm<-1:8
+avg.features<-mclapply(feat.rm, function(x)
+                       avg.feature.rm(data.df, avg.order, x,
+                                      "radial", test.method))
+names(avg.features)<- paste(10:3, "features")
+@ 
+
+<<print-reduced-features-performance,timeit=FALSE>>=
+##print(avg.features)
+m <- do.call("rbind", avg.features)
+colnames(m) <- ages
+@ 
+
+<<reduced-features-table,results='asis',timeit=FALSE>>=
+print(xtable(m), booktabs=TRUE)
+capture.output(print(xtable(m,caption="SVM performance"),
+                     booktabs=TRUE),
+               file="/tmp/m.tex")
+@ 
+
+Finally, we can individually train the SVM and find best features.
+individually at each age.
+
+<<svm-individual-age-optim-features,timeit=TRUE>>=
+#MSE of models with between 3-10 features using individual important features for each DIV
+indiv.features<-mclapply(feat.rm, function(x) feature.rm(data.df, order.mat, x, "radial",
+                                                         test.type=test.method))
+names(indiv.features)<- paste(10:3, "features")
+@
+
+<<optime-print-reduced-features-performance>>=
+optim.m <- do.call("rbind", indiv.features)
+colnames(optim.m) <- ages
+@ 
+
+<<optim-reduced-features-table,results='asis'>>=
+print(xtable(optim.m))
+@ 
+
+\section*{About this document}
+
+<<eval=FALSE>>=
+knitr::knit2pdf("hvc_class.Rnw")
+@ 
+
+\end{document}
