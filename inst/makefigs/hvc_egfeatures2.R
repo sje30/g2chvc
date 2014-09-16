@@ -103,20 +103,20 @@ plotegfeatures()
 
 ## Check to see which electrodes have theta bursting and which don't.
 ## Can we plot more than one trace on a plot.
-pdf('allplots2.pdf')
-par(mfrow=c(4,4))
-lapply(1:h14$NCells, plot.one.isihist)
-dev.off()
+## pdf('allplots2.pdf')
+## par(mfrow=c(4,4))
+## lapply(1:h14$NCells, plot.one.isihist)
+## dev.off()
 
 
-plot.corr.index(s, pch=20, ylab='correlation')
+## plot.corr.index(s, pch=20, ylab='correlation')
 
-dists = s$corr$corr.id[, "dist"]
-corrs = s$corr$corr.id[, "corr"]
-plot(dists, corrs, pch=20, bty='n',
-     las=1,
-     ylab='correlation',
-     xlab=expression(paste("intercell distance (", mu, "m)")))
-mean.corrs = mean(corrs)
-abline(h=mean.corrs, lty=2)
+## dists = s$corr$corr.id[, "dist"]
+## corrs = s$corr$corr.id[, "corr"]
+## plot(dists, corrs, pch=20, bty='n',
+##      las=1,
+##      ylab='correlation',
+##      xlab=expression(paste("intercell distance (", mu, "m)")))
+## mean.corrs = mean(corrs)
+## abline(h=mean.corrs, lty=2)
 # spike time tiling coefficient
