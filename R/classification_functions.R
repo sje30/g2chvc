@@ -2,10 +2,10 @@
 
 ###DECISION TREE FUNCTIONS###
 
-#Function to calculate accuracy and important features from boosted trees
-#Classifies into 20 categories of combined region and DIV
-#Input is data.df, output is prediction accuracy and average importance of each feature,
-#based on its Mean Decrease in Gini
+#Function to calculate accuracy and important features from boosted
+#trees Classifies into 20 categories of combined region and DIV Input
+#is data.df, output is prediction accuracy and average importance of
+#each feature, based on its Mean Decrease in Gini
 boost.tree.all<-function(data.df) {
   ret<-NULL
   classes<-paste(data.df[,1], data.df[,2])
@@ -20,7 +20,8 @@ boost.tree.all<-function(data.df) {
     traindat<-sample(1:nrow(class.df), Ntrain)
     testdat<-class.df[-traindat ,]
     #Calculate boosted classification tree, using all 11 features and 500 trees
-    tree.out<-randomForest(classes~. ,data=class.df[traindat,], mtry=11,importance =TRUE, ntree=500)
+    tree.out<-randomForest(classes~. ,data=class.df[traindat,], mtry=11,
+                           importance =TRUE, ntree=500)
     tree.pred<-predict(tree.out,testdat,type="class")
     correct<- sum(tree.pred==testdat$classes)/(n.row-Ntrain)+ correct
     imp<-importance(tree.out)[,"MeanDecreaseGini"]+imp
@@ -31,8 +32,9 @@ boost.tree.all<-function(data.df) {
   ret
 }
 
-#Function to calculate accuracy and important factors from boosted tree for each region
-#Imput is data.df and region ("ctx" or "hpc"), output is prediction accuracy and average importance of each feature
+#Function to calculate accuracy and important factors from boosted
+#tree for each region Imput is data.df and region ("ctx" or "hpc"),
+#output is prediction accuracy and average importance of each feature
 boost.tree.region<-function(data.df, region1, nreps) {
   ret<-NULL
   reg.set<-subset(data.df,region==region1)[,-1]
@@ -165,13 +167,25 @@ svm.test<-function(traindat, testdat, kernel, cst) {
 #Output is prediction accuracy for each DIV. 
 feature.rm<-function(data.df, order.mat, num.rm, kernel, test.type) { 
   acc<-NULL
-  for (j in 1:10) {
-    acc[j]<-svm.calc(data.df, ages[j], kernel, test.type, (1 +order.mat[1:num.rm,j]))
+  for (j in 1:length(ages)) {
+    rm.fac <- if (num.rm == 0) {
+      NULL
+    } else {
+      (1 +order.mat[1:num.rm,j])
+    }
+    acc[j]<-svm.calc(data.df, ages[j], kernel, test.type, rm.fac)
   }
   acc
 }
 
-avg.feature.rm<-function(data.df, avg.order, num.rm, kernel, test.type) { 
-  acc<-sapply(ages, function(x) svm.calc(data.df, x, kernel, test.type, (1 +avg.order[1:num.rm])))
+avg.feature.rm<-function(data.df, avg.order, num.rm, kernel, test.type) {
+  acc<-sapply(ages, function(x) {
+  rm.fac <- if (num.rm == 0) {
+    NULL
+  }  else {
+    (1 +avg.order[1:num.rm])
+  }
+  svm.calc(data.df, x, kernel, test.type, rm.fac)
+  })
 }
 
