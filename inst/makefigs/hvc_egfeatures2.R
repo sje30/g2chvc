@@ -78,7 +78,7 @@ plot.one.isihist(c14)
 
 
 h14$ns <- compute.ns(h14, ns.T=0.003, ns.N=10,sur=100)
-##plot(h14$ns, ylab='Count', xlab='Time (s)')
+##plot(h14$ns, ylab='Count', xlab='time (s)')
 ##plot(h14$ns$mean, xlab='Time (s)', ylab='number of active electrodes', main='mean network spike')
 
 
@@ -90,7 +90,7 @@ mean(m[upper.tri(m)], na.rm=TRUE)
 plotegfeatures <- function() {
   pdf(file='hvc_egfeatures.pdf', width=inch(8.5), height=inch(13), pointsize=14)
   par(mfrow=c(3,1), las=1, bty='n', mar=c(3.5,3,0.5,0.5), mgp=c(1.8, 0.6, 0))
-  plot(h14$ns$mean, xlab='Time (s)', ylab='#active units', yaxt='n', ylim=c(0,20),
+  plot(h14$ns$mean, xlab='time (s)', ylab='#active units', yaxt='n', ylim=c(0,20),
        xaxt='n',
        main='') ##main='mean network spike'
   axis.ticks(1, -0.3, 0.3, 0.3, 2)
