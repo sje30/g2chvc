@@ -67,6 +67,7 @@ h5.dir <- g2chvcdatadir()
 
 ## use tiling coefficient.
 options(sjemea.corr.method = "Tiling")
+options(sjemea.corr.dt = 0.005)
 h14 <- h5.read.spikes( paste0(h5.dir, 'TC189-DIV14_A.h5'))
 median.train <- order(h14$nspikes)[30]
 plot.one.isihist(h14)
@@ -75,12 +76,15 @@ plot.one.isihist(h14)
 c14 <- h5.read.spikes( paste0(h5.dir, 'C57_CTX_G2CEPHYS1_TC11_DIV14_A.h5'))
 plot.one.isihist(c14)
 
+
 h14$ns <- compute.ns(h14, ns.T=0.003, ns.N=10,sur=100)
 ##plot(h14$ns, ylab='Count', xlab='Time (s)')
 ##plot(h14$ns$mean, xlab='Time (s)', ylab='number of active electrodes', main='mean network spike')
 
 
-
+mean.ci(h14, 0.001)
+m <- tiling.allpairwise(h14, dt=0.05)
+mean(m[upper.tri(m)], na.rm=TRUE)
 ## Compute ISIs
 
 plotegfeatures <- function() {
@@ -93,7 +97,7 @@ plotegfeatures <- function() {
   axis.ticks(2, 0, 20, 10, 1)
   plot.corr.index(h14, ,pch=20, cex=0.5, main='', # 'pairwise correlation'
                   dot.col='black',
-                  yaxt='n',
+                  yaxt='n', ylim=c(0,1),
                   xaxt='n', xlim=c(0, 1600),
                   show.fit=FALSE, ylabel='correlation', show.method=FALSE)
   axis.ticks(1, 0, 1600, 800, 3)
@@ -117,14 +121,10 @@ plotegfeatures()
 ## dev.off()
 
 
-## plot.corr.index(s, pch=20, ylab='correlation')
+## Compare correlations with our valus.
+##load(system.file("stored/features.Rda", package="g2chvc"))
+##d1 = subset(data.df, age==14 & region=="hpc")
+##quantile(d1$corr)
+## 
 
-## dists = s$corr$corr.id[, "dist"]
-## corrs = s$corr$corr.id[, "corr"]
-## plot(dists, corrs, pch=20, bty='n',
-##      las=1,
-##      ylab='correlation',
-##      xlab=expression(paste("intercell distance (", mu, "m)")))
-## mean.corrs = mean(corrs)
-## abline(h=mean.corrs, lty=2)
-# spike time tiling coefficient
+##quantile(subset(data.df, region=ctx, age=7)$corr)
