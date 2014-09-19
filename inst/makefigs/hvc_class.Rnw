@@ -160,9 +160,11 @@ m <- signif(do.call("rbind", avg.features) * 100, 3)
 colnames(m) <- ages
 features.bestfirst <- names(sort(-scores))
 features.bestfirst.l <- sapply(features.bestfirst, get, env=latex.names)
-sorted.scores <- signif(sort(-scores) * -1, 2)
+sorted.scores <- (sort(-scores) * -1)
+sorted.scores <- signif(sorted.scores / sorted.scores[1], 2) #normalise to 1.00
+
 m.df <- data.frame(features.bestfirst.l, sorted.scores, m)
-names(m.df) <- c("Feature", "Gini", ages)
+names(m.df) <- c("Feature", "Score", ages)
 digits <- c(0,0,2,rep(0,10))
 xtab <- xtable(m.df,caption="SVM performance",
                label="tab:svm",
