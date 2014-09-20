@@ -121,10 +121,3 @@ plotegfeatures()
 ## dev.off()
 
 
-## Compare correlations with our valus.
-##load(system.file("stored/features.Rda", package="g2chvc"))
-##d1 = subset(data.df, age==14 & region=="hpc")
-##quantile(d1$corr)
-## 
-
-##quantile(subset(data.df, region=ctx, age=7)$corr)
