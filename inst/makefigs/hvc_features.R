@@ -2,12 +2,10 @@
 ## Copied from ~/proj/sangermea/hvc/ellese/2014-06-08/myvio.R
 ## 2014-08-09
 
-## First need the data.df function.
-
 require(ggplot2)
 require(grid)
 require(gridExtra)
-require(g2chvc)                         #source('analysis_functions.R')
+require(g2chvc)
 
 stats.stars <- function(plot.df) {
   ## Adapted from analysis_functions.R
@@ -84,9 +82,9 @@ g_legend <- function(a.gplot){
 ######################################################################
 ## end of functions.
 
-## Todo: this should come from the package.
-##load("~/proj/sangermea/hvc/ellese/2014-06-08/features.Rda")  ## we need data.df
-load(system.file("stored/features.Rda", package="g2chvc"))
+## Load in the data from the csv.
+data.df <- read.csv(system.file("stored/hvcfeatures.csv", package="g2chvc"),
+                    row.names=1)
 
 
 ynames1 <- names(data.df)[-(1:2)]
