@@ -68,7 +68,8 @@ Run the tree and SVM classifiers.  Taken from classification.R
 <<classification-startup>>=
 ##Set cores from the command line is easier.
 ##options(mc.cores=12)                     #set  to number of cores you have
-load(system.file("stored", "features.Rda", package="g2chvc"))
+data.df <- read.csv(system.file("stored/hvcfeatures.csv", package="g2chvc"),
+                    row.names=1)
 ages<-c(7, 10, 11, 14, 17, 18, 21, 24, 25, 28)
 regions<-c("ctx", "hpc")
 print(getOption("mc.cores"))
