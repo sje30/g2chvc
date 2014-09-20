@@ -53,7 +53,7 @@ require(g2chvc)
 mea.data.dir <- g2chvcdatadir()
 
 #Set global variables
-options(mc.cores = 8)
+##options(mc.cores = 8)
 types<-c("burst", "network.spike", "fir.rate", "corr", "theta.burst")
 ages<-c(7, 10, 11, 14, 17, 18, 21, 24, 25, 28)
 regions<-c("ctx", "hpc")
@@ -67,6 +67,17 @@ Read in all of the HDF5 files (which can take  a few minutes).
 s.list.all<-create.spikes(mea.data.dir)
 @ 
 
+<<get-file-names>>=
+get.filenames.region <- function(l) {
+  ## L is a list of lists; element I is a list of all recordings for the Ith age.
+  names <- lapply(l, function(one.age) {lapply(one.age, function(x) {x$file})})
+  names <- unlist(names)                #flatten
+  basenamepy(names)$base
+}
+ctx.fnames <- get.filenames.region(s.list.all[[1]])
+hpc.fnames <- get.filenames.region(s.list.all[[2]])
+all.fnames <- c(ctx.fnames, hpc.fnames)
+@ 
 \clearpage
 \subsection*{Create feature matrix}
 
@@ -96,11 +107,12 @@ names(data.df)<-c("region", "age", "burst.rate", "burst.dur","spikes.in.bursts",
 data.df[is.na(data.df)]<-0
 @ 
 
-TODO: this is missing the filename.  Can we add this without
-breaking the rest of the scripts?  Can we use rownames()?
+We now save the data frame into /tmp so that we can check it and then
+move it into the package if we wish.
 
 <<save-data-frame>>=
-write.csv(data.df, file="/tmp/hvcfeatures.csv", row.names=FALSE)
+rownames(data.df) <- all.fnames
+write.csv(data.df, file="/tmp/hvcfeatures.csv", row.names=TRUE)
 @ 
 
 \section*{About this document}
