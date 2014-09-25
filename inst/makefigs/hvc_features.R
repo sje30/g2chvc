@@ -38,7 +38,8 @@ qplot.sje <- function(x, upper=0) {
   p <- ggplot(df1) +
     geom_boxplot(aes(x=factor(age), y=values, fill=region),
                  lwd=.1, position="dodge", outlier.size=0.5) +
-                   theme_classic(base_size=8) + theme(legend.position='none') +
+                   scale_fill_brewer(type="qual",palette="Set1") +
+                     theme_classic(base_size=8) + theme(legend.position='none') +
                      theme(axis.line=element_blank()) +
                              xlab("DIV") + ylab(ynames[x]) +
                                theme(axis.line=element_blank(),
