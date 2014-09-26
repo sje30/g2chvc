@@ -28,7 +28,8 @@ which you can directly run, e.g.:
 	require(g2chvc)
 	source(system.file("makefigs/hvc_rasters.R", package="g2chvc"))
 
-In this case you will see PDFs made in your current working directory.
+In this case you will see PDFs made in your current working
+directory.  There is one script for each figure in the paper.
 
 ## Generating the SVM table.
 
