@@ -1,7 +1,12 @@
 # g2chvc
 
 
-Genes to Cognition: Hippocampus vs Cortex project
+Genes to Cognition: Hippocampus vs Cortex project.
+This package provides code relating to our
+[Neural Development](http://www.neuraldevelopment.com/content/10/1/1)
+article.  There is a companion package,
+[g2chvcdata](https://github.com/sje30/g2chvcdata), that stores our data.
+
 
 ## Prerequistes
 
